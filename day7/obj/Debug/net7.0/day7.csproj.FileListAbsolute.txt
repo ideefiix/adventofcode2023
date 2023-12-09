@@ -1,0 +1,15 @@
+C:\Users\flind\Desktop\adventofcode2023\day7\bin\Debug\net7.0\day7.exe
+C:\Users\flind\Desktop\adventofcode2023\day7\bin\Debug\net7.0\day7.deps.json
+C:\Users\flind\Desktop\adventofcode2023\day7\bin\Debug\net7.0\day7.runtimeconfig.json
+C:\Users\flind\Desktop\adventofcode2023\day7\bin\Debug\net7.0\day7.dll
+C:\Users\flind\Desktop\adventofcode2023\day7\bin\Debug\net7.0\day7.pdb
+C:\Users\flind\Desktop\adventofcode2023\day7\obj\Debug\net7.0\day7.csproj.AssemblyReference.cache
+C:\Users\flind\Desktop\adventofcode2023\day7\obj\Debug\net7.0\day7.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\flind\Desktop\adventofcode2023\day7\obj\Debug\net7.0\day7.AssemblyInfoInputs.cache
+C:\Users\flind\Desktop\adventofcode2023\day7\obj\Debug\net7.0\day7.AssemblyInfo.cs
+C:\Users\flind\Desktop\adventofcode2023\day7\obj\Debug\net7.0\day7.csproj.CoreCompileInputs.cache
+C:\Users\flind\Desktop\adventofcode2023\day7\obj\Debug\net7.0\day7.dll
+C:\Users\flind\Desktop\adventofcode2023\day7\obj\Debug\net7.0\refint\day7.dll
+C:\Users\flind\Desktop\adventofcode2023\day7\obj\Debug\net7.0\day7.pdb
+C:\Users\flind\Desktop\adventofcode2023\day7\obj\Debug\net7.0\day7.genruntimeconfig.cache
+C:\Users\flind\Desktop\adventofcode2023\day7\obj\Debug\net7.0\ref\day7.dll
