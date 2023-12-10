@@ -1,9 +1,14 @@
 ﻿namespace day8;
 
-public class Puzzle1
+public class Puzzle2
 {
+    private readonly int ITERATIONS = 90000000; //Defines how many times the instructions should be executed
+
     public void Solve()
     {
+        List<Node> startingNodes = new List<Node>();
+        HashSet<int> endingIndexes = new HashSet<int>();
+
         string navigations;
         Dictionary<string, Node> nodeNetwork = new Dictionary<string, Node>();
         StreamReader sr = new StreamReader(@"C:\Users\flind\Desktop\adventofcode2023\day8\input.txt");
@@ -61,19 +66,61 @@ public class Puzzle1
                 nodeNetwork.Add(parts[0], newNode);
             }
 
+            if (parts[0][2] == 'A')
+            {
+                startingNodes.Add(nodeNetwork[parts[0]]);
+            }
+            else if (parts[0][2] == 'Z')
+            {
+                Node no = nodeNetwork[parts[0]];
+                no.EndNode = true;
+            }
+
             line = sr.ReadLine();
         } //NETWORK CREATED
-        
-        Console.WriteLine("It took " + CountSteps(nodeNetwork, navigations) + " steps to reach ZZZ");
+
+        sr.Close();
+
+        //start case
+        Node first = startingNodes.First();
+        endingIndexes = EndStepsToZZZ(first, navigations);
+        startingNodes.Remove(first);
+
+        //All other cases
+        foreach (var node in startingNodes)
+        {
+            endingIndexes = UpdateEndIndexWithNode(endingIndexes, node, navigations);
+        }
+
+        if (endingIndexes.Count == 0)
+        {
+            Console.WriteLine("To few iterations, no paths hit simontainously. MORE!");
+        }
+        else
+        {
+            Console.WriteLine("It took " + endingIndexes.Min() + " steps to reach ZZZ for all paths");
+        }
     }
 
-    private int CountSteps(Dictionary<string, Node> network, string instructions)
+    private HashSet<int> UpdateEndIndexWithNode(HashSet<int> currEndSteps, Node startingNode, string instructions)
     {
-        Node currNode = network["AAA"];
-        bool completed = false;
+        HashSet<int> nodeEndSteps = EndStepsToZZZ(startingNode, instructions);
+
+        //All endSteps that intersect with existing endSteps are kept
+        var nodeEndStepsIntersect = currEndSteps.Intersect(nodeEndSteps);
+
+        var res = nodeEndStepsIntersect.ToHashSet();
+
+        return res;
+    }
+
+    private HashSet<int> EndStepsToZZZ(Node startingNode, string instructions)
+    {
+        HashSet<int> nodeEndSteps = new HashSet<int>();
+        Node currNode = startingNode;
         int steps = 0;
 
-        while (completed != true)
+        for (int i = 0; i < ITERATIONS; i++)
         {
             foreach (var instruction in instructions)
             {
@@ -88,21 +135,13 @@ public class Puzzle1
                 }
 
                 steps++;
-                if (network["ZZZ"] == currNode)
+                if (currNode.EndNode)
                 {
-                    completed = true;
-                    break;
+                    nodeEndSteps.Add(steps);
                 }
             }
         }
 
-        return steps;
+        return nodeEndSteps;
     }
-}
-
-public class Node
-{
-    public bool EndNode = false; //Used in puzzle2
-    public Node? LeftNode;
-    public Node? RightNode;
 }
