@@ -1,4 +1,4 @@
 ﻿using day8;
 
-Puzzle2Brute puzzle2Brute = new Puzzle2Brute();
-puzzle2Brute.Solve();
+Puzzle2 puzzle2 = new Puzzle2();
+puzzle2.Solve();

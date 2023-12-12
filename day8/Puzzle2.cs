@@ -2,7 +2,6 @@
 
 public class Puzzle2
 {
-    private readonly int ITERATIONS = 90000000; //Defines how many times the instructions should be executed
 
     public void Solve()
     {
@@ -80,68 +79,73 @@ public class Puzzle2
         } //NETWORK CREATED
 
         sr.Close();
+        
+        //Calculate steps X until endNode for all startNodes
+        //They will reach the end node in cycles of length X
+        //Find the LCM of all X
 
-        //start case
-        Node first = startingNodes.First();
-        endingIndexes = EndStepsToZZZ(first, navigations);
-        startingNodes.Remove(first);
+        HashSet<int> primes = new HashSet<int>();
 
-        //All other cases
         foreach (var node in startingNodes)
         {
-            endingIndexes = UpdateEndIndexWithNode(endingIndexes, node, navigations);
+            AddPrimeFactors(StepsToFirstZ(node, navigations), primes);
         }
 
-        if (endingIndexes.Count == 0)
-        {
-            Console.WriteLine("To few iterations, no paths hit simontainously. MORE!");
-        }
-        else
-        {
-            Console.WriteLine("It took " + endingIndexes.Min() + " steps to reach ZZZ for all paths");
-        }
+        Int128 res = primes.Aggregate(1L, (curr, next) => curr * next); 
+        
+        Console.WriteLine("All startNodes will hit endNodes after " + res + " steps");
+
     }
-
-    private HashSet<int> UpdateEndIndexWithNode(HashSet<int> currEndSteps, Node startingNode, string instructions)
+    
+    private void AddPrimeFactors(int n, HashSet<int> primes)
     {
-        HashSet<int> nodeEndSteps = EndStepsToZZZ(startingNode, instructions);
-
-        //All endSteps that intersect with existing endSteps are kept
-        var nodeEndStepsIntersect = currEndSteps.Intersect(nodeEndSteps);
-
-        var res = nodeEndStepsIntersect.ToHashSet();
-
-        return res;
-    }
-
-    private HashSet<int> EndStepsToZZZ(Node startingNode, string instructions)
-    {
-        HashSet<int> nodeEndSteps = new HashSet<int>();
-        Node currNode = startingNode;
-        int steps = 0;
-
-        for (int i = 0; i < ITERATIONS; i++)
+        
+        while (n % 2 == 0)
         {
-            foreach (var instruction in instructions)
+            primes.Add(2);
+            n /= 2;
+        }
+
+        // n must be odd at this point, so we can skip one element
+        for (int i = 3; i <= Math.Sqrt(n); i += 2)
+        {
+            // While i divides n, print i and divide n
+            while (n % i == 0)
             {
-                if (instruction == 'L')
-                {
-                    if (currNode.LeftNode != null) currNode = currNode.LeftNode;
-                }
-
-                if (instruction == 'R')
-                {
-                    if (currNode.RightNode != null) currNode = currNode.RightNode;
-                }
-
-                steps++;
-                if (currNode.EndNode)
-                {
-                    nodeEndSteps.Add(steps);
-                }
+                primes.Add(i);
+                n /= i;
             }
         }
 
-        return nodeEndSteps;
+        primes.Add(n);
+    }
+
+    private int StepsToFirstZ(Node n, string instructions)
+    {
+        Node currNode = n;
+        int steps = 0;
+        bool completed = false;
+
+        while (!completed)
+        {
+            char instruction = instructions[steps % instructions.Length];
+            
+            if (instruction == 'L')
+            {
+                if (currNode.LeftNode != null) currNode = currNode.LeftNode;
+            }
+            else if (instruction == 'R')
+            {
+                if (currNode.RightNode != null) currNode = currNode.RightNode;
+            }
+
+            steps++;
+            if (currNode.EndNode)
+            {
+                completed = true;
+            }
+        }
+
+        return steps;
     }
 }
